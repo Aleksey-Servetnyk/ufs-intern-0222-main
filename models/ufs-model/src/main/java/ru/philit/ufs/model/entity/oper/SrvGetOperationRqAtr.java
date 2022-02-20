@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SrvGetOperationRq {
+public class SrvGetOperationRqAtr {
   private XMLGregorianCalendar createdFrom;
   private XMLGregorianCalendar createdTo;
 }

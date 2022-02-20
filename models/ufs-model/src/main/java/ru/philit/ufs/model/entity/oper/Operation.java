@@ -65,4 +65,5 @@ public class Operation extends ExternalEntity {
   protected String currencyType;
   //endregion
 
+
 }
