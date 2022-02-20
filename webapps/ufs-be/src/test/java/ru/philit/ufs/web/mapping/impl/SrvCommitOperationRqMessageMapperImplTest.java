@@ -29,7 +29,7 @@ import ru.philit.ufs.web.dto.OperationPackageDto;
 import ru.philit.ufs.web.dto.OperationTaskDto;
 import ru.philit.ufs.web.mapping.OperationMapper;
 
-public class OperationMapperImplTest {
+public class SrvCommitOperationRqMessageMapperImplTest {
 
   private static final String INN = "inn";
   private static final Long PACKAGE_ID = 42642735L;
