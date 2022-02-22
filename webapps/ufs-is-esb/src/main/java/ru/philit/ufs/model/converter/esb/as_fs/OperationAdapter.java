@@ -1,6 +1,8 @@
 package ru.philit.ufs.model.converter.esb.as_fs;
 
+import ru.philit.ufs.model.entity.common.OperationTypeCode;
 import ru.philit.ufs.model.entity.esb.as_fs.OpStatusType;
+import ru.philit.ufs.model.entity.esb.as_fs.OperTypeLabel;
 import ru.philit.ufs.model.entity.esb.as_fs.SrvCommitOperationRq;
 import ru.philit.ufs.model.entity.esb.as_fs.SrvCommitOperationRq.SrvCommitOperationRqMessage;
 import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateOperationRq;
@@ -18,8 +20,12 @@ public class OperationAdapter extends AsfsAdapter {
 
   //******** Converters ********
 
-  private static OperationStatus operationStatus(OpStatusType statusType) {
-    return (statusType != null) ? OperationStatus.getByCode(statusType.value()) : null;
+  private static OpStatusType operationStatus(OperationStatus statusType) {
+    return (statusType != null) ? OpStatusType.fromValue(statusType.code()) : null;
+  }
+
+  private static OperTypeLabel operTypeLabel(OperationTypeCode operationTypeCode) {
+    return (operationTypeCode != null) ? OperTypeLabel.fromValue(operationTypeCode.code()) : null;
   }
 
   //******** Mappers ********
@@ -31,7 +37,7 @@ public class OperationAdapter extends AsfsAdapter {
 
   //******** SrvCreateOperationRq ********
   private static void map(Operation operation, SrvCreateOperationRqMessage message) {
-    message.setOperationType(operation.getOperationType());
+    message.setOperationType(operTypeLabel(operation.getTypeCode()));
     message.setOperatorId(operation.getOperatorId());
     message.setWorkPlaceUId(operation.getWorkPlaceUId());
   }
@@ -45,7 +51,8 @@ public class OperationAdapter extends AsfsAdapter {
   //******** SrvUpdOperationRq ********
   private static void map(Operation operation, SrvUpdOperationRqMessage message) {
     message.setOperationId(operation.getOperationId());
-    message.setOperationType(operation.getOperationType());
+    message.setOperationType(operTypeLabel(operation.getTypeCode()));
+    message.setOperationStatus(operationStatus(operation.getStatus()));
     message.setOperatorId(operation.getOperatorId());
     message.setAmount(operation.getAmount());
     message.setOperationNum(operation.getOperationNum());
