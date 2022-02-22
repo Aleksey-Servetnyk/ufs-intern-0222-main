@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import ru.philit.ufs.model.converter.esb.as_fs.MapStructOperationAdapter;
 import ru.philit.ufs.model.converter.esb.as_fs.OperationAdapter;
 import ru.philit.ufs.model.entity.esb.as_fs.SrvCommitOperationRq;
 import ru.philit.ufs.model.entity.oper.Operation;
@@ -30,6 +31,14 @@ public class OperationAdapterTest extends AsfsAdapterBaseTest {
   @Test
   public void testCommitOperationRq() {
     SrvCommitOperationRq request = OperationAdapter.requestCommitOperation(operation);
+    assertHeaderInfo(request.getHeaderInfo());
+    Assert.assertNotNull(request.getSrvCommitOperationRqMessage());
+    Assert.assertEquals(request.getSrvCommitOperationRqMessage().getOperationId(), OPERATION_ID);
+  }
+
+  @Test
+  public void testMapStructCommitOperationRq() {
+    SrvCommitOperationRq request = MapStructOperationAdapter.requestCommitOperation(operation);
     assertHeaderInfo(request.getHeaderInfo());
     Assert.assertNotNull(request.getSrvCommitOperationRqMessage());
     Assert.assertEquals(request.getSrvCommitOperationRqMessage().getOperationId(), OPERATION_ID);
