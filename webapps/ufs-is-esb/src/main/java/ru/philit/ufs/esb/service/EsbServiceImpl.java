@@ -335,6 +335,15 @@ public class EsbServiceImpl
           }
           break;
 
+/*        case RequestType.COMMIT_OPERATION:
+          if (isCashSymbolRequest(entityRequest)) {
+            SrvCashSymbolsListRq request = CashSymbolAdapter.requestCashSymbol(
+                (CashSymbolRequest) entityRequest.getRequestData());
+            isEsbCache.putRequest(request.getHeaderInfo().getRqUID(), entityRequest);
+            esbClient.sendMessage(pprbConverter.getXml(request));
+          }
+          break;*/
+
         default:
           logger.error("Sending ExternalEntityRequest with unknown entityType {}",
               entityRequest.getEntityType());
