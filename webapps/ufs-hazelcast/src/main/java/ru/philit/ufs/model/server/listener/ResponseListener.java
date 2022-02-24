@@ -25,6 +25,7 @@ import ru.philit.ufs.model.entity.oper.CashDepositAnnouncement;
 import ru.philit.ufs.model.entity.oper.CashDepositAnnouncementsRequest;
 import ru.philit.ufs.model.entity.oper.CashSymbol;
 import ru.philit.ufs.model.entity.oper.CashSymbolRequest;
+import ru.philit.ufs.model.entity.oper.Operation;
 import ru.philit.ufs.model.entity.oper.OperationPackage;
 import ru.philit.ufs.model.entity.oper.OperationPackageRequest;
 import ru.philit.ufs.model.entity.oper.OperationTasksRequest;
@@ -299,6 +300,22 @@ public class ResponseListener
           hazelcastServer.getCashSymbolsMap().put(
               new LocalKey<>(request.getSessionId(), (CashSymbolRequest) request.getRequestData()),
               ((ExternalEntityList<CashSymbol>) entity).getItems());
+        }
+        break;
+
+      case RequestType.COMMIT_OPERATION:
+        if (entity instanceof Operation) {
+          hazelcastServer.getSrvCommitOperation().put(
+              new LocalKey<>(request.getSessionId(), (String) request.getRequestData()),
+              (Operation) entity);
+        }
+        break;
+
+      case RequestType.CREATE_OPERATION:
+        if (entity instanceof Operation) {
+          hazelcastServer.getSrvCreateOperation().put(
+              new LocalKey<>(request.getSessionId(), (String) request.getRequestData()),
+              (Operation) entity);
         }
         break;
 
