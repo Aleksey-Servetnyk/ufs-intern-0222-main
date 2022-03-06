@@ -8,7 +8,6 @@ import ru.philit.ufs.model.entity.common.OperationTypeCode;
 import ru.philit.ufs.model.entity.esb.as_fs.OpStatusType;
 import ru.philit.ufs.model.entity.esb.as_fs.OperTypeLabel;
 import ru.philit.ufs.model.entity.esb.as_fs.SrvCommitOperationRq;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCommitOperationRq.SrvCommitOperationRqMessage;
 import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateOperationRq;
 import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateOperationRq.SrvCreateOperationRqMessage;
 import ru.philit.ufs.model.entity.esb.as_fs.SrvRollbackOperationRq;
@@ -31,11 +30,13 @@ public class MapStructOperationAdapter extends AsfsAdapter {
   }
 
   //******** Mappers ********
+/*
 
   //******** SrvCommitOperationRqMessage ********
   private static void map(Operation operation, SrvCommitOperationRqMessage message) {
     message = SrvCommitOperationRqMessageMapper.INSTANCE.toMessage(operation);
   }
+*/
 
   //******** SrvCreateOperationRqMessage ********
   private static void map(Operation operation, SrvCreateOperationRqMessage message) {
@@ -62,8 +63,8 @@ public class MapStructOperationAdapter extends AsfsAdapter {
   public static SrvCommitOperationRq requestCommitOperation(Operation operation) {
     SrvCommitOperationRq request = new SrvCommitOperationRq();
     request.setHeaderInfo(headerInfo());
-    request.setSrvCommitOperationRqMessage(new SrvCommitOperationRqMessage());
-    map(operation, request.getSrvCommitOperationRqMessage());
+    request.setSrvCommitOperationRqMessage(SrvCommitOperationRqMessageMapper.INSTANCE.toMessage(operation));
+    //map(operation, request.getSrvCommitOperationRqMessage());
     return request;
   }
 
