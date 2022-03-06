@@ -9,6 +9,9 @@ import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.AUDITED_REQUES
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CASH_SYMBOLS_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CHECK_FRAUD_BY_ACCOUNT_OPERATION_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.COMMISSION_BY_ACCOUNT_OPERATION_MAP;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.COMMIT_OPERATION;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CREATE_OPERATION;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.GET_OPERATION;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.LEGAL_ENTITY_BY_ACCOUNT_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.LOGGED_EVENTS;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.OPERATION_BY_TASK_MAP;
@@ -30,7 +33,9 @@ import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.REQUEST_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.REQUEST_QUEUE;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.RESPONSE_FLAG_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.RESPONSE_QUEUE;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.ROLLBACK_OPERATION;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.SEIZURES_BY_ACCOUNT_MAP;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.UPD_OPERATION;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.USER_BY_SESSION_MAP;
 
 import com.hazelcast.config.Config;
@@ -175,6 +180,12 @@ public class HazelcastServer {
 
   @Getter private IMap<LocalKey<CashSymbolRequest>, List<CashSymbol>> cashSymbolsMap;
 
+  @Getter private IMap<LocalKey<String>, Operation> srvCommitOperation;
+  @Getter private IMap<LocalKey<String>, Operation> srvCreateOperation;
+  @Getter private IMap<LocalKey<String>, Operation> srvRollbackOperation;
+  @Getter private IMap<LocalKey<String>, Operation> srvUpdOperation;
+  @Getter private IMap<LocalKey<String>, Operation> srvGetOperation;
+
   /**
    * Конструктор бина.
    */
@@ -292,6 +303,12 @@ public class HazelcastServer {
     operatorByUserMap = instance.getMap(OPERATOR_BY_USER_MAP);
     operatorByIdMap = instance.getMap(OPERATOR_BY_ID_MAP);
     cashSymbolsMap = instance.getMap(CASH_SYMBOLS_MAP);
+
+    srvCommitOperation = instance.getMap(COMMIT_OPERATION);
+    srvCreateOperation = instance.getMap(CREATE_OPERATION);
+    srvRollbackOperation = instance.getMap(ROLLBACK_OPERATION);
+    srvUpdOperation = instance.getMap(UPD_OPERATION);
+    srvGetOperation = instance.getMap(GET_OPERATION);
 
     logger.info("Hazelcast server for {} is started", instance.getName());
   }

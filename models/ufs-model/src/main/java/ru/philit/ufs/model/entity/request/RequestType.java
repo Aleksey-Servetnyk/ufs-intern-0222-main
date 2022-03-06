@@ -31,6 +31,12 @@ public class RequestType {
   public static final String OPERATOR_BY_ID = "OPERATOR_BY_ID";
   public static final String CASH_SYMBOL = "CASH_SYMBOL";
 
+  public static final String COMMIT_OPERATION = "COMMIT_OPERATION";
+  public static final String CREATE_OPERATION = "CREATE_OPERATION";
+  public static final String ROLLBACK_OPERATION = "ROLLBACK_OPERATION";
+  public static final String UPD_OPERATION = "UPD_OPERATION";
+  public static final String GET_OPERATION = "GET_OPERATION";
+
   private RequestType() {}
 
 }
