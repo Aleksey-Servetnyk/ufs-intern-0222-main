@@ -35,6 +35,7 @@ public class MapStructOperationAdapter extends AsfsAdapter {
   //******** SrvCommitOperationRqMessage ********
   private static void map(Operation operation, SrvCommitOperationRqMessage message) {
     message = SrvCommitOperationRqMessageMapper.INSTANCE.toMessage(operation);
+    message.setOperationId(operation.getOperationId());
   }
 */
 
