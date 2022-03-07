@@ -42,6 +42,14 @@
       <artifactId>jaxb-api</artifactId>
       <version>2.2.11</version>
     </dependency>
+
+
+    <dependency>
+      <groupId>ru.philit.ufs</groupId>
+      <artifactId>ufs-is-esb</artifactId>
+      <version>1.0</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -72,6 +80,19 @@
               <packageName>ru.philit.ufs.model.entity.esb.pprb</packageName>
               <sources>
                 <source>src/main/resources/xsd/pprb.xsd</source>
+              </sources>
+              <clearOutputDir>false</clearOutputDir>
+            </configuration>
+          </execution>
+          <execution>
+            <id>as_fs.xsd</id>
+            <goals>
+              <goal>xjc</goal>
+            </goals>
+            <configuration>
+              <packageName>ru.philit.ufs.model.entity.esb.as_fs</packageName>
+              <sources>
+                <source>src/main/resources/xsd/as_fs.xsd</source>
               </sources>
               <clearOutputDir>false</clearOutputDir>
             </configuration>
