@@ -55,6 +55,7 @@ public class AsfsMockService extends CommonMockService implements MessageProcess
 
         }
       }
+      return true;
     } catch (JAXBException e) {
       // this message can not be processed this processor
       logger.trace("this message can not be processed this processor", e);
