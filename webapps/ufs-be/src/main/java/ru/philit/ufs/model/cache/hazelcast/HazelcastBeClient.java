@@ -6,6 +6,9 @@ import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.ACCOUNT_RESIDU
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.AUDITED_REQUESTS;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CASH_SYMBOLS_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.COMMISSION_BY_ACCOUNT_OPERATION_MAP;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.COMMIT_OPERATION;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CREATE_OPERATION;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.GET_OPERATION;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.LEGAL_ENTITY_BY_ACCOUNT_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.LOGGED_EVENTS;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.OPERATION_BY_TASK_MAP;
@@ -24,7 +27,9 @@ import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.REPRESENTATIVE
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.REPRESENTATIVE_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.REQUEST_QUEUE;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.RESPONSE_FLAG_MAP;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.ROLLBACK_OPERATION;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.SEIZURES_BY_ACCOUNT_MAP;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.UPD_OPERATION;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.USER_BY_SESSION_MAP;
 
 import com.hazelcast.client.HazelcastClient;
@@ -142,6 +147,18 @@ public class HazelcastBeClient {
   @Getter
   private IMap<LocalKey<String>, Operator> operatorByIdMap;
 
+  @Getter
+  private IMap<LocalKey<String>, Operation> srvCommitOperationMap;
+  @Getter
+  private IMap<LocalKey<String>, Operation> srvCreateOperationMap;
+  @Getter
+  private IMap<LocalKey<String>, Operation> srvRollbackOperationMap;
+  @Getter
+  private IMap<LocalKey<String>, Operation> srvUpdOperationMap;
+  @Getter
+  private IMap<LocalKey<String>, Operation> srvGetOperationMap;
+
+
   @Autowired
   public HazelcastBeClient(
       HazelcastInstance hazelcastClient, HazelcastClientBeProperties properties
@@ -191,6 +208,14 @@ public class HazelcastBeClient {
     operatorByUserMap = instance.getMap(OPERATOR_BY_USER_MAP);
     operatorByIdMap = instance.getMap(OPERATOR_BY_ID_MAP);
 
+    //region Work with Operations
+    srvCommitOperationMap = instance.getMap(COMMIT_OPERATION);
+    srvCreateOperationMap = instance.getMap(CREATE_OPERATION);
+    srvRollbackOperationMap = instance.getMap(ROLLBACK_OPERATION);
+    srvUpdOperationMap = instance.getMap(UPD_OPERATION);
+    srvGetOperationMap = instance.getMap(GET_OPERATION);
+    //endregion
+
     logger.info("{} started", this.getClass().getSimpleName());
   }
 
@@ -206,11 +231,11 @@ public class HazelcastBeClient {
   }
 
   /**
-   * Отправляет запрос данных в Мастер-системы.
-   * Ожидает поступления ответа в течение времени ожидания.
+   * Отправляет запрос данных в Мастер-системы. Ожидает поступления ответа в течение времени
+   * ожидания.
    *
    * @param entityType код запроса сущности
-   * @param key локальный id запрашиваемой сущности
+   * @param key        локальный id запрашиваемой сущности
    * @return true is response is got
    */
   public <T extends Serializable> boolean requestExternalEntity(String entityType,

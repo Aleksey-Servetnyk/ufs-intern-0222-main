@@ -8,7 +8,9 @@ import static ru.philit.ufs.model.entity.request.RequestType.ADD_OPER_TASK;
 import static ru.philit.ufs.model.entity.request.RequestType.CARD_INDEX_ELEMENTS_BY_ACCOUNT;
 import static ru.philit.ufs.model.entity.request.RequestType.CASH_SYMBOL;
 import static ru.philit.ufs.model.entity.request.RequestType.CHECK_OPER_PACKAGE;
+import static ru.philit.ufs.model.entity.request.RequestType.COMMIT_OPERATION;
 import static ru.philit.ufs.model.entity.request.RequestType.COUNT_COMMISSION;
+import static ru.philit.ufs.model.entity.request.RequestType.CREATE_OPERATION;
 import static ru.philit.ufs.model.entity.request.RequestType.CREATE_OPER_PACKAGE;
 import static ru.philit.ufs.model.entity.request.RequestType.GET_OPER_TASKS;
 import static ru.philit.ufs.model.entity.request.RequestType.GET_OVN;
@@ -18,6 +20,7 @@ import static ru.philit.ufs.model.entity.request.RequestType.LEGAL_ENTITY_BY_ACC
 import static ru.philit.ufs.model.entity.request.RequestType.OPERATOR_BY_ID;
 import static ru.philit.ufs.model.entity.request.RequestType.OPERATOR_BY_USER;
 import static ru.philit.ufs.model.entity.request.RequestType.OPER_TYPES_BY_ROLE;
+import static ru.philit.ufs.model.entity.request.RequestType.ROLLBACK_OPERATION;
 import static ru.philit.ufs.model.entity.request.RequestType.SEARCH_REPRESENTATIVE;
 import static ru.philit.ufs.model.entity.request.RequestType.SEIZURES_BY_ACCOUNT;
 import static ru.philit.ufs.model.entity.request.RequestType.UPDATE_OPER_TASK;
@@ -188,6 +191,29 @@ public class HazelcastCacheImpl
   public void addOperation(Long taskId, Operation operation) {
     client.getOperationByTaskMap().put(taskId, operation);
   }
+
+  //region Work with Operations Methods
+  @Override
+  public Operation createOperation(Operation operation, ClientInfo clientInfo) {
+    return requestData(
+        operation.getOperationId(), client.getSrvCreateOperationMap(), CREATE_OPERATION, clientInfo
+    );
+  }
+
+  @Override
+  public Operation commitOperation(Operation operation, ClientInfo clientInfo) {
+    return requestData(
+        operation.getOperationId(), client.getSrvCommitOperationMap(), COMMIT_OPERATION, clientInfo
+    );
+  }
+
+  @Override
+  public Operation cancelOperation(Operation operation, ClientInfo clientInfo) {
+    return requestData(
+        operation.getOperationId(), client.getSrvRollbackOperationMap(), ROLLBACK_OPERATION, clientInfo
+    );
+  }
+  //endregion
 
   @Override
   public OperationPackage getPackage(OperationPackageRequest request, ClientInfo clientInfo) {

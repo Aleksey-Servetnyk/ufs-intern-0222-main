@@ -28,4 +28,11 @@ public interface OperationCache {
 
   List<OperationPackage> getTasksInPackages(OperationTasksRequest request, ClientInfo clientInfo);
 
+  Operation createOperation(Operation operation, ClientInfo clientInfo);
+
+  Operation commitOperation(Operation operation, ClientInfo clientInfo);
+
+  Operation cancelOperation(Operation operation, ClientInfo clientInfo);
+
+
 }
